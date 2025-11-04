@@ -1,29 +1,3 @@
-// // server.js
-// import express from "express";
-// import dotenv from "dotenv";
-// import connectDB from "./db.js";
-// import cookieParser from "cookie-parser";
-
-// import adminRoutes from "./routes/authRoutes.js";
-// import blogRoutes from "./routes/blogRoutes.js";
-
-// dotenv.config();
-// connectDB();
-// const app = express();
-
-// app.use(express.json());
-// app.use("/api/admin", adminRoutes);
-// app.use("/api/blogs", blogRoutes);
-
-// // ✅ Connect to MongoDB
-
-// app.get("/", (req, res) => {
-//     res.send("MongoDB connection test successful 🚀");
-// });
-
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
-
 
 // server.js
 import express from "express";
@@ -76,11 +50,17 @@ app.use(
 app.use("/api/admin", adminRoutes);
 app.use("/api/blogs", blogRoutes);
 
+// ================= HEALTH & TEST =================
+app.get("/healthy", (req, res) => {
+    console.log("💓 Health check ping at:", new Date().toISOString());
+    res.status(200).send("OK");
+});
+
 // ✅ Root Route (Test)
 app.get("/", (req, res) => {
     res.send("MongoDB connection test successful 🚀");
 });
 
-// ✅ Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () => console.log(`✅ Server running on port ${PORT}`));
+
