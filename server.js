@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Allowed Origins (for local + production)
+// ✅ Allowed Origins (Frontend URLs)
 const allowedOrigins = [
     "http://localhost:5173",
     "http://192.168.1.2:5173",
@@ -27,20 +27,20 @@ const allowedOrigins = [
     "http://192.168.1.5:5173",
     "https://techpixo.com",
     "https://techpixo.com/admin",
+    "https://techpixo.onrender.com",
 ];
 
-// ✅ CORS setup
 app.use(
     cors({
         origin: function (origin, callback) {
-            if (!origin) return callback(null, true); // allow tools like Postman
+            if (!origin) return callback(null, true);
             if (allowedOrigins.some((url) => origin.startsWith(url))) {
                 return callback(null, true);
             }
             console.warn("🚫 Blocked by CORS:", origin);
-            callback(new Error("CORS policy: This origin is not allowed"));
+            callback(new Error("CORS policy: Not allowed by server"));
         },
-        credentials: true, // ✅ allow cookies
+        credentials: true, // ✅ Needed for cookies
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
     })

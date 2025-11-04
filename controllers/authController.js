@@ -106,17 +106,28 @@ const generateToken = (admin) => {
     );
 };
 
-// Helper for cookie options based on environment
+// ✅ Helper for cookie options
 const getCookieOptions = () => {
     const isProduction = process.env.NODE_ENV === "production";
+
+    let cookieDomain;
+    if (process.env.BASE_URL?.includes("techpixo.onrender.com")) {
+        cookieDomain = "techpixo.onrender.com";
+    } else if (process.env.BASE_URL?.includes("techpixo.com")) {
+        cookieDomain = ".techpixo.com";
+    } else {
+        cookieDomain = "localhost";
+    }
+
     return {
         httpOnly: true,
-        secure: isProduction, // only true in production (HTTPS)
-        sameSite: isProduction ? "None" : "Lax",
-        domain: isProduction ? ".techpixo.com" : "localhost",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        secure: isProduction, // true for HTTPS (Render)
+        sameSite: isProduction ? "None" : "Lax", // None for cross-site cookies
+        domain: cookieDomain, // 🔥 Works for Render + Custom Domain + Localhost
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 };
+
 
 // 📝 Register Admin
 export const adminRegister = async (req, res) => {
